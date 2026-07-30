@@ -3,16 +3,22 @@ import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { Database } from '../types/supabase';
 import { motion } from 'motion/react';
-import { Search } from 'lucide-react';
+import { Search, BookOpen } from 'lucide-react';
 import { cn } from '../lib/utils';
 
 import TiltCard from '../components/TiltCard';
 import SocialIcon from '../components/SocialIcon';
 
 type ContentRow = Database['public']['Tables']['content']['Row'];
+type ArticleRow = Database['public']['Tables']['articles']['Row'];
+
+type FeedItem = 
+  | { _type: 'content'; id: string; title: string; topic_tag: string; description: string; platform: string; published_at: string }
+  | { _type: 'article'; id: string; title: string; topic_tag: string; description: string; published_at: string };
 
 export default function Home() {
   const [content, setContent] = useState<ContentRow[]>([]);
+  const [articles, setArticles] = useState<ArticleRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTags, setActiveTags] = useState<Set<string>>(new Set());
@@ -20,7 +26,7 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    async function fetchContent() {
+    async function fetchAll() {
       if (!supabase) {
         setError('Supabase client is not configured. Please check your environment variables.');
         setLoading(false);
@@ -28,13 +34,16 @@ export default function Home() {
       }
 
       try {
-        const { data, error } = await supabase
-          .from('content')
-          .select('*')
-          .order('published_at', { ascending: sortBy === 'oldest' });
+        const [contentRes, articlesRes] = await Promise.all([
+          supabase.from('content').select('*').order('published_at', { ascending: false }),
+          supabase.from('articles').select('*').order('published_at', { ascending: false }),
+        ]);
 
-        if (error) throw error;
-        setContent(data || []);
+        if (contentRes.error) throw contentRes.error;
+        if (articlesRes.error) throw articlesRes.error;
+
+        setContent(contentRes.data || []);
+        setArticles(articlesRes.data || []);
       } catch (err: any) {
         setError(err.message || 'Failed to fetch content');
       } finally {
@@ -42,10 +51,18 @@ export default function Home() {
       }
     }
 
-    fetchContent();
-  }, [sortBy]);
+    fetchAll();
+  }, []);
 
-  const allTags = Array.from(new Set(content.map(c => c.topic_tag).filter(Boolean))) as string[];
+  const feed: FeedItem[] = [
+    ...content.map(c => ({ _type: 'content' as const, id: c.id, title: c.title, topic_tag: c.topic_tag, description: c.description, platform: c.platform, published_at: c.published_at })),
+    ...articles.map(a => ({ _type: 'article' as const, id: a.id, title: a.title, topic_tag: a.topic_tag, description: a.summary, published_at: a.published_at })),
+  ].sort((a, b) => {
+    const diff = new Date(b.published_at).getTime() - new Date(a.published_at).getTime();
+    return sortBy === 'newest' ? diff : -diff;
+  });
+
+  const allTags = Array.from(new Set(feed.map(c => c.topic_tag).filter(Boolean))) as string[];
   
   const toggleTag = (tag: string) => {
     setActiveTags(prev => {
@@ -59,7 +76,7 @@ export default function Home() {
     });
   };
 
-  const filteredContent = content.filter(item => {
+  const filteredFeed = feed.filter(item => {
     const matchesTag = activeTags.size === 0 || activeTags.has(item.topic_tag);
     const query = searchQuery.toLowerCase();
     const matchesSearch = query === '' 
@@ -115,7 +132,7 @@ export default function Home() {
       {/* Content Hub */}
       <section className="space-y-6">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <h2 className="text-3xl font-display text-offwhite">Latest Episodes</h2>
+          <h2 className="text-3xl font-display text-offwhite">Latest</h2>
           
           <div className="flex items-center gap-4 w-full md:w-auto">
             <select 
@@ -136,7 +153,7 @@ export default function Home() {
             </div>
             <input
               type="text"
-              placeholder="Search content..."
+              placeholder="Search content and articles..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="block w-full pl-10 pr-3 py-3 border border-gold/30 rounded-xl bg-base/50 text-offwhite placeholder-offwhite/50 focus:outline-none focus:ring-1 focus:ring-gold focus:border-gold transition-colors"
@@ -189,14 +206,47 @@ export default function Home() {
               </div>
             ))}
           </div>
-        ) : filteredContent.length === 0 ? (
+        ) : filteredFeed.length === 0 ? (
           <div className="text-center py-12 glass-panel rounded-2xl border-dashed border-gold/20">
             <Search className="mx-auto h-8 w-8 text-offwhite/30 mb-2" />
-            <p className="text-offwhite/70">No content found for your search/filters.</p>
+            <p className="text-offwhite/70">Nothing here yet. Check the Library for articles.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredContent.map((item, index) => {
+            {filteredFeed.map((item, index) => {
+              if (item._type === 'content') {
+                return (
+                  <TiltCard
+                    key={item.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ delay: index * 0.1 }}
+                    className="glass-panel p-5 rounded-2xl flex flex-col group cursor-pointer border-transparent hover:border-gold/30 hover:-translate-y-1 transition-all duration-300"
+                  >
+                    <Link to={`/content/${item.id}`} className="flex-grow flex flex-col h-full w-full">
+                      <div className="relative w-full h-48 mb-4 overflow-hidden bg-maroon/20 blob-shape flex items-center justify-center border border-gold/10">
+                        <SocialIcon platform={item.platform} size={48} className="text-gold/50 group-hover:text-gold transition-colors duration-300" />
+                      </div>
+                      
+                      <div className="flex justify-between items-start mb-2">
+                        <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-maroon text-gold">
+                          {item.topic_tag}
+                        </span>
+                        <SocialIcon platform={item.platform} size={18} className="text-offwhite/50" />
+                      </div>
+                      
+                      <h3 className="text-xl font-display text-offwhite group-hover:text-gold transition-colors duration-300 mb-2 line-clamp-2">
+                        {item.title}
+                      </h3>
+                      
+                      <p className="text-offwhite/70 text-sm line-clamp-3">
+                        {item.description}
+                      </p>
+                    </Link>
+                  </TiltCard>
+                );
+              }
               return (
                 <TiltCard
                   key={item.id}
@@ -206,16 +256,15 @@ export default function Home() {
                   transition={{ delay: index * 0.1 }}
                   className="glass-panel p-5 rounded-2xl flex flex-col group cursor-pointer border-transparent hover:border-gold/30 hover:-translate-y-1 transition-all duration-300"
                 >
-                  <Link to={`/content/${item.id}`} className="flex-grow flex flex-col h-full w-full">
+                  <Link to={`/article/${item.id}`} className="flex-grow flex flex-col h-full w-full">
                     <div className="relative w-full h-48 mb-4 overflow-hidden bg-maroon/20 blob-shape flex items-center justify-center border border-gold/10">
-                      <SocialIcon platform={item.platform} size={48} className="text-gold/50 group-hover:text-gold transition-colors duration-300" />
+                      <BookOpen size={48} className="text-gold/50 group-hover:text-gold transition-colors duration-300" />
                     </div>
                     
                     <div className="flex justify-between items-start mb-2">
                       <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-maroon text-gold">
                         {item.topic_tag}
                       </span>
-                      <SocialIcon platform={item.platform} size={18} className="text-offwhite/50" />
                     </div>
                     
                     <h3 className="text-xl font-display text-offwhite group-hover:text-gold transition-colors duration-300 mb-2 line-clamp-2">
