@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Fredoka", sans-serif;
+  --font-sans: "Inter", sans-serif;
+
+  --color-base: #331A21;
+  --color-maroon: #7A2331;
+  --color-gold: #D9A441;
+  --color-offwhite: #FDFBF7;
+
+  --text-xs: clamp(0.7rem, 0.65rem + 0.25vw, 0.75rem);
+  --text-sm: clamp(0.8rem, 0.75rem + 0.25vw, 0.875rem);
+  --text-base: clamp(0.95rem, 0.9rem + 0.25vw, 1rem);
+  --text-lg: clamp(1.05rem, 1rem + 0.25vw, 1.125rem);
+  --text-xl: clamp(1.2rem, 1.1rem + 0.5vw, 1.25rem);
+  --text-2xl: clamp(1.35rem, 1.2rem + 0.75vw, 1.5rem);
+  --text-3xl: clamp(1.75rem, 1.5rem + 1vw, 1.875rem);
+  --text-4xl: clamp(2rem, 1.75rem + 1.25vw, 2.25rem);
+  --text-5xl: clamp(2.5rem, 2rem + 2vw, 3rem);
+  --text-6xl: clamp(3rem, 2.5rem + 2.5vw, 3.75rem);
+}
+
+@layer base {
+  body {
+    @apply bg-base text-offwhite font-sans antialiased selection:bg-gold/30 selection:text-gold;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display tracking-wide;
+  }
+}
+
+@utility blob-shape {
+  border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+}
+
+@utility blob-shape-2 {
+  border-radius: 50% 50% 30% 70% / 60% 40% 60% 40%;
+}
+
+@utility glass-panel {
+  @apply bg-maroon/20 backdrop-blur-md border border-gold/20 shadow-lg;
+}
