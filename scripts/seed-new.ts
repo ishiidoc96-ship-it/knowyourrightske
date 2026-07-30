@@ -104,35 +104,19 @@ const articles = [
   },
 ];
 
-const contentList = [
-  { id: id(), title: "How is property divided in a Kenyan divorce?", platform: "youtube", embed_url: "https://www.youtube.com/embed/dQw4w9WgXcQ", topic_tag: "Family Law", description: "A breakdown of the Matrimonial Property Act and how courts decide who gets what when a marriage ends.", published_at: daysAgo(1) },
-  { id: id(), title: "Why you MUST have a Will (Succession Law explained)", platform: "tiktok", embed_url: "https://www.tiktok.com/embed/v2/123456789", topic_tag: "Succession Law", description: "What happens to your property if you die without a will? The Law of Succession Act explained in 1 minute.", published_at: daysAgo(2) },
-  { id: id(), title: "Domestic Violence Protection Orders - Step by Step", platform: "instagram", embed_url: "https://www.instagram.com/p/12345/embed", topic_tag: "Family Law", description: "How to apply for a Protection Order under the Protection Against Domestic Violence Act.", published_at: daysAgo(3) },
-  { id: id(), title: "Child Custody and Maintenance in Kenya (Podcast)", platform: "podcast", embed_url: "https://open.spotify.com/embed/episode/789", topic_tag: "Children's Rights", description: "Deep dive into how Kenyan courts decide custody and calculate child maintenance under the Children's Act.", published_at: daysAgo(4) },
-  { id: id(), title: "Land Disputes: Boundary conflicts and what to do", platform: "youtube", embed_url: "https://www.youtube.com/embed/dQw4w9WgXcQ", topic_tag: "Land Law", description: "Step by step guide to resolving land disputes through the Land Registrar, NLC, and Environment and Land Court.", published_at: daysAgo(5) },
-  { id: id(), title: "3 things to do immediately after a car accident", platform: "tiktok", embed_url: "https://www.tiktok.com/embed/v2/123456789", topic_tag: "Traffic & Insurance", description: "Your legal obligations and rights after a road accident. Don't make these common mistakes.", published_at: daysAgo(6) },
-  { id: id(), title: "Can you go to jail for a WhatsApp message?", platform: "instagram", embed_url: "https://www.instagram.com/p/12345/embed", topic_tag: "Digital Rights", description: "Cybercrime law in Kenya - what you can and cannot say online under the Computer Misuse Act.", published_at: daysAgo(7) },
-  { id: id(), title: "Auctioneers explained: Know your rights (Podcast)", platform: "podcast", embed_url: "https://open.spotify.com/embed/episode/101", topic_tag: "Debt Recovery", description: "What auctioneers can and cannot do when recovering debts. Know the rules before they show up.", published_at: daysAgo(8) },
-  { id: id(), title: "How to sue the government for violating your rights", platform: "youtube", embed_url: "https://www.youtube.com/embed/dQw4w9WgXcQ", topic_tag: "Access to Justice", description: "A guide to filing a constitutional petition at the High Court when your rights are violated.", published_at: daysAgo(9) },
-  { id: id(), title: "Is your employer stealing your NSSF?", platform: "tiktok", embed_url: "https://www.tiktok.com/embed/v2/123456789", topic_tag: "Employment Law", description: "Your rights regarding NSSF, NHIF, and other statutory deductions. Check your payslip!", published_at: daysAgo(10) },
-];
+// NOTE: Add real content entries here with actual embed URLs from your social media platforms.
+// Example:
+// { id: id(), title: "...", platform: "youtube", embed_url: "https://www.youtube.com/embed/REAL_ID", topic_tag: "...", description: "...", published_at: daysAgo(1) },
 
-const questions = [
-  { id: id(), question_text: "My husband and I are separating after 10 years of marriage. I was a stay-at-home mom. Do I have any right to the business he built during our marriage?", topic_tag: "Family Law", email: "mary.wanjiku@example.com", user_id: null, status: "pending", submitted_at: daysAgo(2) },
-  { id: id(), question_text: "My father died without a will. He had 3 wives and 8 children. How will his property be shared?", topic_tag: "Succession Law", email: "peter.ochieng@example.com", user_id: null, status: "pending", submitted_at: daysAgo(3) },
-  { id: id(), question_text: "A neighbor has built a structure that encroaches on my land by 5 meters. The Land Registrar says I need to go to court. How long will this take?", topic_tag: "Land Law", email: "jane.muthoni@example.com", user_id: null, status: "pending", submitted_at: daysAgo(4) },
-  { id: id(), question_text: "An auctioneer came to my house and took my TV and fridge over a debt my brother owes. He said it doesn't matter because we live in the same house. Is this legal?", topic_tag: "Debt Recovery", email: "kevin.otieno@example.com", user_id: null, status: "pending", submitted_at: daysAgo(5) },
-  { id: id(), question_text: "Someone shared my private photos on Facebook without my permission. What can I do under Kenyan law?", topic_tag: "Digital Rights", email: "faith.nyambura@example.com", user_id: null, status: "pending", submitted_at: daysAgo(1) },
-];
+const questions: {
+  id: string; question_text: string; topic_tag: string | null; email: string | null;
+  user_id: string | null; status: string; submitted_at: string;
+}[] = [];
 
-const galleryItems = [
-  { id: id(), media_type: "photo", platform: "instagram", title: "Divorce Property Division Infographic", embed_or_image_url: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=400", topic_tag: "Family Law", thumbnail_url: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=400", published_at: daysAgo(1) },
-  { id: id(), media_type: "photo", platform: "facebook", title: "Succession Law Cheat Sheet", embed_or_image_url: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=400", topic_tag: "Succession Law", thumbnail_url: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=400", published_at: daysAgo(2) },
-  { id: id(), media_type: "video", platform: "youtube", title: "Domestic Violence: How to Get a Protection Order", embed_or_image_url: "https://www.youtube.com/embed/dQw4w9WgXcQ", topic_tag: "Family Law", thumbnail_url: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=400", published_at: daysAgo(3) },
-  { id: id(), media_type: "photo", platform: "instagram", title: "Child Maintenance Calculation Guide", embed_or_image_url: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=400", topic_tag: "Children's Rights", thumbnail_url: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=400", published_at: daysAgo(4) },
-  { id: id(), media_type: "photo", platform: "tiktok", title: "Land Dispute Resolution Flowchart", embed_or_image_url: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=400", topic_tag: "Land Law", thumbnail_url: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=400", published_at: daysAgo(5) },
-  { id: id(), media_type: "video", platform: "youtube", title: "Car Accident Checklist", embed_or_image_url: "https://www.youtube.com/embed/dQw4w9WgXcQ", topic_tag: "Traffic & Insurance", thumbnail_url: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=400", published_at: daysAgo(6) },
-];
+const galleryItems: {
+  id: string; media_type: string; platform: string; title: string;
+  embed_or_image_url: string; topic_tag: string; thumbnail_url: string | null; published_at: string;
+}[] = [];
 
 async function seed() {
   console.log("Seeding new content...");
@@ -141,17 +125,7 @@ async function seed() {
   if (aErr) { console.error("Articles error:", aErr.message); return; }
   console.log(`✓ ${articles.length} articles inserted`);
 
-  const { error: cErr } = await supabase.from('content').insert(contentList);
-  if (cErr) { console.error("Content error:", cErr.message); return; }
-  console.log(`✓ ${contentList.length} content items inserted`);
-
-  const { error: qErr } = await supabase.from('questions').insert(questions);
-  if (qErr) { console.error("Questions error:", qErr.message); return; }
-  console.log(`✓ ${questions.length} questions inserted`);
-
-  const { error: gErr } = await supabase.from('gallery').insert(galleryItems);
-  if (gErr) { console.error("Gallery error:", gErr.message); return; }
-  console.log(`✓ ${galleryItems.length} gallery items inserted`);
+  console.log('✓ (no content items — add real embed URLs above)');
 
   console.log("Seeding complete!");
 }
