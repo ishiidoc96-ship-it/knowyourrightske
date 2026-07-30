@@ -6,6 +6,7 @@ import NewsletterSignup from './NewsletterSignup';
 import { supabase } from '../lib/supabase';
 import { AnimatePresence, motion } from 'motion/react';
 import { cn } from '../lib/utils';
+import KenyanFlag from './KenyanFlag';
 
 export default function Layout() {
   const [scrolled, setScrolled] = useState(false);
@@ -47,9 +48,10 @@ export default function Layout() {
           <div className="flex items-center justify-between transition-all duration-300">
             <div className="flex items-center">
               <Link to="/" className={cn(
-                "font-bold font-display text-gold tracking-wider transition-all duration-300",
+                "font-bold font-display text-gold tracking-wider transition-all duration-300 inline-flex items-center gap-2",
                 scrolled ? "text-xl" : "text-xl md:text-2xl"
               )}>
+                <KenyanFlag size={24} className="rounded-sm" />
                 Know Your Rights KE
               </Link>
             </div>
@@ -128,7 +130,10 @@ export default function Layout() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-12 items-center mb-12">
             <div>
-              <p className="font-display text-2xl text-gold mb-2">Know Your Rights KE</p>
+              <p className="font-display text-2xl text-gold mb-2 inline-flex items-center gap-2">
+                <KenyanFlag size={22} className="rounded-sm" />
+                Know Your Rights KE
+              </p>
               <p className="text-offwhite/80 max-w-md">Empowering Kenyans with everyday legal knowledge. Because ignorance of the law is no defense.</p>
             </div>
             <div>

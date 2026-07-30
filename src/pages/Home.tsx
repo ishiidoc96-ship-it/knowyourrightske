@@ -8,6 +8,7 @@ import { cn } from '../lib/utils';
 
 import TiltCard from '../components/TiltCard';
 import SocialIcon from '../components/SocialIcon';
+import KenyanFlag from '../components/KenyanFlag';
 
 type ContentRow = Database['public']['Tables']['content']['Row'];
 type ArticleRow = Database['public']['Tables']['articles']['Row'];
@@ -107,6 +108,16 @@ export default function Home() {
         >
           Answering the everyday legal questions of Kenyans. No jargon, just your rights.
         </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+          className="inline-flex items-center gap-2 px-4 py-1.5 border border-gold/30 rounded-full text-xs font-bold uppercase tracking-wider text-gold bg-maroon/20"
+        >
+          <KenyanFlag size={16} className="rounded-sm" />
+          Kenyan Law, Made Clear
+        </motion.div>
         
         <motion.div 
           initial={{ opacity: 0, y: 20 }}

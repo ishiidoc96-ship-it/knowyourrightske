@@ -5,6 +5,7 @@ import { Database } from '../types/supabase';
 import { motion } from 'motion/react';
 import { ArrowLeft, BookOpen } from 'lucide-react';
 import SocialIcon from '../components/SocialIcon';
+import KenyanFlag from '../components/KenyanFlag';
 
 type ArticleRow = Database['public']['Tables']['articles']['Row'];
 type ContentRow = Database['public']['Tables']['content']['Row'];
@@ -115,9 +116,15 @@ export default function ArticleDetail() {
       </Link>
 
       <header className="space-y-4">
-        <span className="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-maroon text-gold">
-          {article.topic_tag}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-maroon text-gold">
+            {article.topic_tag}
+          </span>
+          <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-gold/20 text-gold/70">
+            <KenyanFlag size={12} className="rounded-sm" />
+            Kenya
+          </span>
+        </div>
         <h1 className="text-4xl md:text-5xl font-display text-gold leading-tight">
           {article.title}
         </h1>
